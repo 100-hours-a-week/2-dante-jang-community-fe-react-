@@ -1,0 +1,164 @@
+.write-post-wrapper {
+    margin: 0 auto;
+}
+
+.write-post-title {
+    margin-bottom: 1rem;
+}
+
+.write-post-tile-input {
+    width: 95%;
+    padding: 0.75rem;
+    font-size: 1.5rem;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.3rem;
+    background-color: #f9f9f9;
+    outline: none;
+}
+
+.editor-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.editor-button {
+    background-color: #f0f0f0;
+    border: 0.1rem solid #ccc;
+    border-radius: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.editor-button:hover {
+    background-color: #e0e0e0;
+}
+
+.editor-button.is-active {
+    background-color: #d0d0d0;
+}
+
+.icon {
+    width: 1.2rem;
+    height: 1.2rem;
+}
+
+.editor-select {
+    padding: 0.3rem 0.6rem;
+    border: 0.1px solid #ccc;
+    border-radius: 0.3rem;
+    background-color: #f0f0f0;
+    cursor: pointer;
+}
+
+.editor-input {
+    padding: 0.3rem 0.6rem;
+    border: 0.1px solid #ccc;
+    border-radius: 0.3rem;
+}
+
+.link-input-container {
+    display: flex;
+    gap: 0.3rem;
+}
+
+.hidden-input {
+    display: none;
+}
+
+.editor-content {
+    border: 0.1px solid #ccc;
+    border-radius: 0.3rem;
+    padding: 1rem;
+    min-height: 200px;
+}
+
+.editor-bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.character-count {
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    color: #666;
+}
+
+.submit-btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin-top: 1.25rem;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
+.ProseMirror:focus {
+    outline: none;
+}
+
+.ProseMirror h1 {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+}
+
+.ProseMirror h2 {
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+.ProseMirror h3 {
+    font-size: 1.17em;
+    margin-bottom: 0.5em;
+}
+
+.ProseMirror p {
+    margin-bottom: 1em;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+.ProseMirror code {
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.ProseMirror pre {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 1em;
+}
+
+.ProseMirror img {
+    max-width: 100%;
+    height: auto;
+}
+
+.ProseMirror a {
+    color: #0000EE;
+    text-decoration: underline;
+}
+
+.ProseMirror hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+}

@@ -1,0 +1,110 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    background-color: #ffffff;
+    box-shadow: 0 0 3px #000000;
+}
+
+.header-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 10vw;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+
+    display: flex;
+    align-items: center;
+
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.profile-icon {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+.profile-icon-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.hamburger-icon {
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
+    background-size: 100% 100%;
+    background-position: 50% 50%;
+    background-image: url(../../assets/image/hamburger.png);
+}
+
+.side-navigation {
+    position: absolute;
+    top: 65px;
+    right: calc(10vw - 5px);
+    background-color: #ffffff;
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.side-nav-text {
+    display: block;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+.header-write-button {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Pacifico', cursive;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    margin-right: 1rem;
+}
+
+.header-write-button:hover {
+    color: #007bff;
+}
+
+.header-write-icon {
+    margin-right: 5px;
+    font-size: 18px;
+}
