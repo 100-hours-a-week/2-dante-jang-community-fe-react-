@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import DefaultProfileImage from "../../assets/image/default-profile-image-dark.png"
 import "./style.css";

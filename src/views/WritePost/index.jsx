@@ -8,8 +8,10 @@ import Link from '@tiptap/extension-link';
 import DOMPurify from 'dompurify';
 import { Bold, Italic, List, ListOrdered, Image as ImageIcon, Code, Link as LinkIcon, Highlighter, Minus } from 'lucide-react';
 import './style.css';
-import { writePostRequest } from '../../apis/post';
+import { updatePostRequest, writePostRequest } from '../../apis/post';
 import FormData from "form-data";
+import { v4 as uuidv4 } from 'uuid';
+import { uploadImageRequest } from 'apis/image';
 
 /**
  * @description `
@@ -87,13 +89,21 @@ const WritePost = () => {
         if (!validateTitle(sanitizedTitle)) {
             return;
         }
-        imageProcessing(sanitizeInput(editor.getHTML()));
 
-        // const writePostResponse = await writePostRequest(sanitizedTitle, sanitizedContent, null);
-        // console.log(writePostResponse);
+        const writePostResponse = await writePostRequest(sanitizedTitle, '<div></div>', null);
+        if (writePostResponse) {
+            const postId = writePostResponse.postId;
+            const content = await imageProcessing(sanitizeInput(editor.getHTML()), postId);
+            console.log(content);
+            const updatePostResponse = await updatePostRequest(postId, content, sanitizedTitle, null);
+            console.log(updatePostResponse.postId);
+        } else {
+            console.log('wirte post error');
+            alert('게시글 작성이 실패했습니다.');
+        }
     };
 
-    const imageProcessing = async (content) => {
+    const imageProcessing = async (content, postId) => {
         const parser = new DOMParser();
         const doc = parser.parseFromString(content, 'text/html');
         const imgTags = doc.querySelectorAll('img');
@@ -102,7 +112,26 @@ const WritePost = () => {
             const src = img.getAttribute('src')
             if (src && src.startsWith('data:')) {
                 const base64Data = src.split(',')[1];
+                const mimeType = src.match(/^data:(.*?);base64,/)[1];
+                const extension = mimeType.split('/')[1];
+                const imageName = `image_${uuidv4()}.${extension}`;
+
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = Array.from(byteCharacters, (char) => char.charCodeAt(0));
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], { type: mimeType });
+
                 const formData = new FormData();
+                formData.append(
+                    'file',
+                    blob,
+                    `post-${postId}-${imageName}`
+                );
+
+                const uploadImageResponse = await uploadImageRequest(formData);
+                if (uploadImageResponse) {
+                    img.setAttribute('src', uploadImageResponse.imageId);
+                }
             }
         });
 
