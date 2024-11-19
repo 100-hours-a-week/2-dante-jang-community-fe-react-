@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -7,15 +7,15 @@ import Color from '@tiptap/extension-color';
 import Link from '@tiptap/extension-link';
 import DOMPurify from 'dompurify';
 import { Bold, Italic, List, ListOrdered, Image as ImageIcon, Code, Link as LinkIcon, Highlighter, Minus } from 'lucide-react';
-import { updatePostRequest, writePostRequest } from '../../apis/post';
+import { getPostRequest, updatePostRequest } from '../../apis/post';
 import FormData from "form-data";
 import { v4 as uuidv4 } from 'uuid';
 import { uploadImageRequest } from 'apis/image';
-import { useNavigate } from 'react-router-dom';
-import { POST_PATH } from 'constants';
-import './style.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import { POST_PATH, ERROR_PATH } from 'constants';
 
-const WritePost = () => {
+const ModifyPost = () => {
+    const { postId } = useParams();
     const [title, setTitle] = useState('');
     const [imageUrl, setImageUrl] = useState(null);
     const [thumbnailImage, setThumbnailImage] = useState(null);
@@ -40,6 +40,22 @@ const WritePost = () => {
             },
         },
     });
+
+    useEffect(() => {
+        const fetchPostData = async () => {
+            const getPostResponse = await getPostRequest(postId);
+            if (!getPostResponse) {
+                navigate(ERROR_PATH());
+                return;
+            }
+
+            setTitle(getPostResponse.post.title);
+            setThumbnailImage(getPostResponse.post.image_url);
+            editor.commands.setContent(getPostResponse.post.content);
+        };
+
+        fetchPostData();
+    }, [postId, editor, navigate]);
 
     const addImage = useCallback(() => {
         if (imageUrl && editor) {
@@ -102,28 +118,24 @@ const WritePost = () => {
             return;
         }
 
-        const writePostResponse = await writePostRequest(sanitizedTitle, '<div></div>', null);
-        if (writePostResponse) {
-            const postId = writePostResponse.postId;
-            const content = await imageProcessing(sanitizeInput(editor.getHTML()), postId);
-            console.log(content);
-            const updatePostResponse = await updatePostRequest(
-                postId, 
-                content, 
-                sanitizedTitle, 
-                await thumbnailProcessing(postId));
-            console.log(updatePostResponse.postId);
-            navigate(POST_PATH('unknown','unknown',postId));
-        } else {
-            console.log('wirte post error');
-            alert('게시글 작성이 실패했습니다.');
-        }
+        const content = await imageProcessing(sanitizeInput(editor.getHTML()), postId);
+        console.log(content);
+        const updatePostResponse = await updatePostRequest(
+            postId, 
+            content, 
+            sanitizedTitle, 
+            await thumbnailProcessing(postId));
+        console.log(updatePostResponse.postId);
+        navigate(POST_PATH('unknown','unknown',postId));
     };
 
     const thumbnailProcessing = async (postId) => {
-        
+        if (!thumbnailFile) {
+            return null;
+        }
+
         const formData = new FormData();
-        formData.append('file',thumbnailFile,`post-${postId}-thumbnail`);
+        formData.append('file',thumbnailFile,`post-${postId}-thumbnail-${uuidv4()}`);
         const uploadImageResponse = await uploadImageRequest(formData);
         if (uploadImageResponse) {
             return uploadImageResponse.imageId;
@@ -290,7 +302,7 @@ const WritePost = () => {
                     </div>
                     {/* 버튼 */}
                     <button className="submit-btn" onClick={handleSubmit}>
-                        작성
+                        수정
                     </button>
                 </div>
             </div>
@@ -298,4 +310,4 @@ const WritePost = () => {
     );
 };
 
-export default WritePost;
+export default ModifyPost;

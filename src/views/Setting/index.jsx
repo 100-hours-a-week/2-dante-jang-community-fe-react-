@@ -6,7 +6,7 @@ import { initUser } from "../../stores/userSlice";
 import { changeUserNameRequest, changeUserProfileRequest } from "../../apis/user";
 import FormData from "form-data";
 import { PasswordChangeModal } from "../../components/setting/ChangePasswordModal";
-import { DeleteConfirmationModal } from "../../components/setting/deleteUserModal";
+import { DeleteConfirmationModal } from "../../components/setting/DeleteUserModal";
 
 const Setting = () => {
     const user = useSelector((state) => state.user);

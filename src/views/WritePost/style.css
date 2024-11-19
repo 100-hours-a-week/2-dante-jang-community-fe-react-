@@ -1,5 +1,8 @@
 .write-post-wrapper {
     margin: 0 auto;
+    background-color: white;
+    padding: 3rem;
+    border-radius: 1rem;
 }
 
 .write-post-title {
@@ -17,10 +20,17 @@
 }
 
 .editor-toolbar {
-    display: flex;
+    display: flex;;
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-bottom: 1rem;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .editor-toolbar {
+        display: none;
+    }
 }
 
 .editor-button {
@@ -71,6 +81,40 @@
     display: none;
 }
 
+.thumbnail-section {
+    width: 100%;
+    height: 10%;
+    max-height: 10vh;
+    border: 0.2rem dashed #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+}
+
+.thumbnail-section:hover {
+    border-color: #888;
+}
+
+.thumbnail-placeholder {
+    color: #888;
+    font-size: 1rem;
+    text-align: center;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.thumbnail-preview {
+    width: 100%;
+    height: 10vh;
+    object-fit: contain;
+    border-radius: 8px;
+    cursor: pointer
+}
+
 .editor-content {
     border: 0.1px solid #ccc;
     border-radius: 0.3rem;
@@ -97,6 +141,19 @@
     border-radius: 0.25rem;
     cursor: pointer;
     margin-top: 1.25rem;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+.setting-btn {
+    background-color: #717171;
+    color: white;
+    padding: 0.625rem 1.25rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    margin-top: 1.25rem;
+    margin-right: 1rem;
     font-size: 1rem;
     transition: background-color 0.3s;
 }

@@ -7,6 +7,7 @@ import User from 'views/User';
 import Login from 'views/Login';
 import Setting from 'views/Setting';
 import PostDetail from 'views/PostDetail';
+import ModifyPost from 'views/ModifyPost';
 import { ProtectedRoute } from 'components/util/ProtectedRoute';
 import { RedirectRoute } from 'components/util/RedirectRoute';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,10 +21,12 @@ import {
         SETTING_PATH, 
         WRITE_POST_PATH, 
         POST_PATH,
-        ERROR_PATH
+        ERROR_PATH,
+        MODIFY_POST_PATH
     } from './constants';
 import WritePost from './views/WritePost';
 import Error from 'views/\bError';
+import 'App.css'
 
 function App() {
     const dispatch = useDispatch();
@@ -61,7 +64,7 @@ function App() {
 
                 <Route path={SETTING_PATH()} element={<ProtectedRoute><Setting /></ProtectedRoute>} />
                 <Route path={WRITE_POST_PATH()} element={<ProtectedRoute><WritePost /></ProtectedRoute>} />
-
+                <Route path={MODIFY_POST_PATH(`:postId`)} element={<ProtectedRoute><ModifyPost /></ProtectedRoute>} />
             </Route>
         </Routes>
     );

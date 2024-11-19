@@ -12,6 +12,7 @@ export const USER_PATH = (userName) => `/${userName}`;
 // Post
 export const POST_PATH = (userName, postTitle, postId) => `/${userName}/${postTitle}/${postId}`;
 export const WRITE_POST_PATH = () => '/write-post'
+export const MODIFY_POST_PATH = (postId) => `/modify-post/${postId}`;
 
 // Error
 export const ERROR_PATH = () => '/error'
