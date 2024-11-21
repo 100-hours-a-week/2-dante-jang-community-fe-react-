@@ -58,10 +58,22 @@
     color: var(--color-muted);
 }
 
-.post-views, .post-likes {
+.post-views {
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+}
+
+.post-likes {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    color: var(--color-muted);
+    transition: color 0.3s ease;
+}
+
+.post-likes.active {
+    color: blue;
 }
 
 .prose {

@@ -18,6 +18,7 @@ const CHECK_NAME_URL = (name) => `${API_DOMAIN}/check-name?name=${encodeURICompo
 const CHECK_USER_PASSWORD_URL = () => `${API_DOMAIN}/check-password`;
 const SIGN_UP_URL = () => `${API_DOMAIN}`;
 const USER_INFO_URL = () => `${API_DOMAIN}`;
+const USER_INFO_WITH_NAME_URL = (name) => `${API_DOMAIN}/name/${encodeURIComponent(name)}`;
 const LOGIN_URL = () => `${API_DOMAIN}/login`;
 const LOGOUT_URL = () => `${API_DOMAIN}/logout`;
 const CHANGE_USER_PROFILE_URL = () => `${API_DOMAIN}/change-profile`;
@@ -105,6 +106,17 @@ export const userInfoRequest = async () => {
             USER_INFO_URL(),
             { withCredentials: true }
         );
+        const responseBody = new UserInfoResponseDto(response.data.user);
+        return responseBody;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+};
+
+export const userInfoWithNameRequest = async (name) => {
+    try {
+        const response = await axiosInstance.get(USER_INFO_WITH_NAME_URL(name));
         const responseBody = new UserInfoResponseDto(response.data.user);
         return responseBody;
     } catch (error) {

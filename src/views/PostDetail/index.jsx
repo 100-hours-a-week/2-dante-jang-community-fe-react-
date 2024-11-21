@@ -4,9 +4,11 @@ import { POST_PATH, ERROR_PATH } from "constants";
 import { getPostRequest } from "apis/post";
 import { useSelector } from "react-redux";
 import { Edit, Trash2, Eye, ThumbsUp } from 'lucide-react'
-import 'views/PostDetail/style.css'
 import { MODIFY_POST_PATH } from "constants";
 import { DeletePostModal } from "components/post/DeletePostModal";
+import { CommenSection } from "components/comment/CommentSection";
+import 'views/PostDetail/style.css'
+import { createLikeRequest, deleteLikeRequest, getPostLikeCountRequest, isMyLikePostRequest } from "apis/like";
 
 const PostDetail = () => {
     const { userName, postTitle, postId } = useParams();
@@ -15,10 +17,9 @@ const PostDetail = () => {
 
     const [post, setPost] = useState(null);
     const [postUser, setPostUser] = useState(null);
-    const [postComments, setPostComments] = useState(null);
     const [isMyPost, setIsMyPost] = useState(false);
+    const [isMyLikePost, setIsMyLikePost] = useState(false);
     const [isDeletePostModalOpen, setIsDeletePostModalOpen] = useState(false);
-    // const [tableOfContents, setTableOfContents] = useState([])
 
     const contentRef = useRef(null)
 
@@ -26,30 +27,30 @@ const PostDetail = () => {
         const fetchPostData = async () => {
             try {
                 const getPostResponse = await getPostRequest(postId);
-                console.log(getPostResponse);
                 if (!getPostResponse) {
                     navigate(ERROR_PATH());
                     return;
                 }
-
                 if (userName !== getPostResponse.user.name || postTitle !== getPostResponse.post.title) {
                     navigate(POST_PATH(getPostResponse.user.name, getPostResponse.post.title, postId));
                     return;
                 }
 
+                const getPostLikeCountResponse = await getPostLikeCountRequest(postId);
+                if (getPostLikeCountResponse) {
+                    getPostResponse.post.like_count = getPostLikeCountResponse.likeCount;
+                }
+
                 setPost(getPostResponse.post);
                 setPostUser(getPostResponse.user);
-                setPostComments(getPostResponse.comments);
                 setIsMyPost(getPostResponse.user.name === user.name);
 
-                // const parser = new DOMParser()
-                // const doc = parser.parseFromString(getPostResponse.post.content, 'text/html')
-                // const headers = Array.from(doc.querySelectorAll('h1, h2, h3'))
-                // setTableOfContents(headers.map((header, index) => ({
-                //     id: `section-${index}`,
-                //     text: header.textContent,
-                //     level: parseInt(header.tagName.charAt(1))
-                // })))
+                if (user.isLoggedIn) {
+                    const isMyLikePostResponse = await isMyLikePostRequest(postId);
+                    if (isMyLikePostResponse) {
+                        setIsMyLikePost(isMyLikePostResponse.isMyLikePost);
+                    }
+                }
             } catch (error) {
                 console.error("Error fetching post data:", error);
                 alert("게시글을 불러오는 중 문제가 발생했습니다.");
@@ -66,6 +67,33 @@ const PostDetail = () => {
     const handleDelete = () => {
         setIsDeletePostModalOpen(true);
     }
+
+    const handleLike = async () => {
+        if (!user.isLoggedIn) {
+            alert("로그인을 해주세요!");
+            return;
+        }
+
+        if (isMyLikePost) {
+            const deleteLikeResponse = await deleteLikeRequest(postId);
+            if (deleteLikeResponse) {
+                setIsMyLikePost(false);
+                setPost((prevPost) => ({
+                    ...prevPost,
+                    like_count: prevPost.like_count - 1,
+                }));
+            }
+        } else {
+            const createLikeResponse = await createLikeRequest(postId);
+            if (createLikeResponse) {
+                setIsMyLikePost(true);
+                setPost((prevPost) => ({
+                    ...prevPost,
+                    like_count: prevPost.like_count + 1,
+                }));
+            }
+        }
+    };
 
     if (!post || !postUser) return null
 
@@ -97,7 +125,7 @@ const PostDetail = () => {
                 </div>
 
                 <div className="thumbnail-viewer">
-                        {post.image_url &&
+                    {post.image_url &&
                         <img src={post.image_url} alt="Thumbnail" className="thumbnail-view" />}
                 </div>
 
@@ -114,31 +142,23 @@ const PostDetail = () => {
                             <Eye className="h-4 w-4" />
                             <span>{post.view_count}</span>
                         </div>
-                        <div className="post-likes">
+                        <div
+                            className={`post-likes ${isMyLikePost ? 'active' : ''}`}
+                            onClick={handleLike}
+                            style={{ cursor: user.isLoggedIn ? 'pointer' : 'not-allowed' }}
+                            title={user.isLoggedIn ? '' : '로그인을 해주세요!'}
+                        >
                             <ThumbsUp className="h-4 w-4" />
                             <span>{post.like_count || 0}</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="comments-section">
-                <h2>Comments</h2>
-                <div className="comments-list">
-                    {postComments.length > 0 ? (
-                        postComments.map((comment, index) => (
-                            <div key={index} className="comment">
-                                <div className="comment-author">
-                                    <img src={comment.user.profile_url} alt={comment.user.name} className="comment-avatar" />
-                                    <span>{comment.user.name}</span>
-                                </div>
-                                <p>{comment.content}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p>첫 댓글을 남겨보세요!</p>
-                    )}
-                </div>
-            </div>
+
+            {/* 댓글 */}
+            <CommenSection postId={postId} />
+
+            {/* 삭제 모달 */}
             <DeletePostModal
                 isOpen={isDeletePostModalOpen}
                 onClose={() => setIsDeletePostModalOpen(false)}

@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import PostCard from 'components/post/PostCard';
-import { getPostListRequest } from 'apis/post';
+import { getUserPostListRequest } from 'apis/post';
 
-const PostList = () => {
+const UserPostList = ({userId}) => {
     const [posts, setPosts] = useState([]);
     const [postMap, setPostMap] = useState({});
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const loader = useRef(null);
 
-    const fetchPosts = async (page) => {
+    const fetchPosts = async (userId, page) => {
         try {
-            const postListResponse = await getPostListRequest(page);
+            const postListResponse = await getUserPostListRequest(userId, page);
             const newPosts = postListResponse.posts;
 
             if (newPosts.length === 0) {
@@ -47,11 +47,11 @@ const PostList = () => {
 
     useEffect(() => {
         const loadPosts = async () => {
-            await fetchPosts(page);
+            await fetchPosts(userId, page);
         };
 
         loadPosts();
-    }, [page, postMap]);
+    }, [userId, page, postMap]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(handleObserver, { threshold: 1.0 });
@@ -80,4 +80,4 @@ const styles = {
     },
 };
 
-export default PostList;
+export default UserPostList;

@@ -29,7 +29,7 @@ const PostCard = ({ post, user }) => {
                     <p className="post-card__user-name">{user.name}</p>
                 </div>
                 <h2>{post.title}</h2>
-                <p>{new Date(post.writed_at).toLocaleDateString()}</p>
+                <p>{new Date(post.written_at).toLocaleDateString()}</p>
                 <p>Views: {post.view_count}</p>
             </div>
         </div>

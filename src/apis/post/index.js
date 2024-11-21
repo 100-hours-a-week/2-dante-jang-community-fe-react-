@@ -14,6 +14,7 @@ const DELETE_POST_URL = (postId) => `${API_DOMAIN}/${encodeURIComponent(postId)}
 const UPDATE_POST_URL = (postId) => `${API_DOMAIN}/${encodeURIComponent(postId)}`;
 const GET_POST_URL = (postId) => `${API_DOMAIN}/${encodeURIComponent(postId)}`;
 const GET_POST_LIST_URL = (page) => `${API_DOMAIN}?page=${encodeURIComponent(page)}`;
+const GET_USER_POST_LIST_URL = (userId, page) => `${API_DOMAIN}/users/${encodeURIComponent(userId)}?page=${encodeURIComponent(page)}`;
 
 export const writePostRequest = async (title, content, image_url) => {
     try {
@@ -57,8 +58,7 @@ export const getPostRequest = async (postId) => {
         const responseBody = new GetPostResponseDto(
             response.data.message,
             response.data.post,
-            response.data.user,
-            response.data.comments
+            response.data.user
         );
         return responseBody;
     } catch (error) {
@@ -70,6 +70,17 @@ export const getPostRequest = async (postId) => {
 export const getPostListRequest = async (page) => {
     try {
         const response = await axiosInstance.get(GET_POST_LIST_URL(page));
+        const responseBody = new PostListResponseDto(response.data.message, response.data.posts);
+        return responseBody;
+    } catch (error) {
+        console.error("Error:", error);
+        return null;
+    }
+}
+
+export const getUserPostListRequest = async (userId, page) => {
+    try {
+        const response = await axiosInstance.get(GET_USER_POST_LIST_URL(userId, page));
         const responseBody = new PostListResponseDto(response.data.message, response.data.posts);
         return responseBody;
     } catch (error) {
