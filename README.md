@@ -1,70 +1,90 @@
-# Getting Started with Create React App
+# 커뮤니티 FE
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 개요
+이 프로젝트는 간단한 커뮤니티 웹을 구현한 것입니다.  
+React를 기반으로 작성되었으며, 게시글 작성 및 열람을 주요 기능으로 제공합니다.
 
-## Available Scripts
+## Page 설명
 
-In the project directory, you can run:
+### Main Page
+메인 페이지에서는 모든 사용자의 게시글이 최근 작성일 기준으로 무한 스크롤 형태로 제공됩니다.  
+`'/'` 경로를 통해 접근할 수 있습니다.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### SignUp Page
+회원가입 페이지로, 사용자는 다음 입력값을 통해 회원가입할 수 있습니다:
+- 이름 (고유값)
+- 이메일 (고유값)
+- 비밀번호  
+- 비밀번호 확인  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+`'/sign-up'` 경로를 통해 접근할 수 있습니다.
 
-### `npm test`
+---
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Login Page
+로그인 기능을 제공하는 페이지입니다.  
+사용자는 이메일과 비밀번호를 입력하여 로그인을 진행할 수 있습니다.  
+`'/login'` 경로를 통해 접근할 수 있습니다.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### User Page
+특정 사용자의 정보를 조회할 수 있는 페이지입니다.  
+유저 이름을 경로로 포함하여 접근하며, 사용자의 게시글 목록이 표시됩니다.  
+`'/${userName}'` 경로를 통해 접근할 수 있습니다.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Setting Page
+사용자 설정을 변경할 수 있는 페이지입니다.  
+사용자는 프로필 이미지 변경, 닉네임 변경 등의 기능을 이용할 수 있습니다.  
+또한 사용자 탈퇴를 수행 할 수 있습니다.  
+`'/setting'` 경로를 통해 접근할 수 있습니다.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Post Detail Page
+게시글의 상세 내용을 열람할 수 있는 페이지입니다.  
+게시글의 좋아요, 조회수, 댓글을 확인 할 수 있습니다.  
+게시글 제목과 작성자, 고유 ID를 포함한 경로로 접근합니다.  
+본인의 게시글일 경우 수정 및 삭제가 가능합니다.  
+`'/${userName}/${postTitle}/${postId}'` 경로를 통해 접근할 수 있습니다.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Write Post Page
+새로운 게시글을 작성할 수 있는 페이지입니다.  
+`'/write-post'` 경로를 통해 접근할 수 있습니다.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+---
 
-## Learn More
+### Modify Post Page
+기존 게시글을 수정할 수 있는 페이지입니다.  
+게시글의 고유 ID를 포함한 경로로 접근합니다.  
+`'/modify-post/${postId}'` 경로를 통해 접근할 수 있습니다.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+---
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Error Page
+예기치 못한 오류 발생 시 표시되는 페이지입니다.  
+사용자는 `'/error'` 경로를 통해 접근할 수 있습니다.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Paths
 
-### Analyzing the Bundle Size
+| **Page**               | **Path**                                    |
+|-------------------------|---------------------------------------------|
+| Main Page              | `'/'`                                       |
+| SignUp Page            | `'/sign-up'`                                |
+| Login Page             | `'/login'`                                  |
+| User Page              | `/${userName}`                              |
+| Setting Page           | `'/setting'`                                |
+| Post Detail Page       | `/${userName}/${postTitle}/${postId}`        |
+| Write Post Page        | `'/write-post'`                             |
+| Modify Post Page       | `'/modify-post/${postId}'`                  |
+| Error Page             | `'/error'`                                  |
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+위와 같이 각 페이지는 고유한 경로를 통해 접근할 수 있습니다.

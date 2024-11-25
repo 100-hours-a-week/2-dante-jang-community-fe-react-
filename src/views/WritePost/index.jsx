@@ -106,7 +106,6 @@ const WritePost = () => {
         if (writePostResponse) {
             const postId = writePostResponse.postId;
             const content = await imageProcessing(sanitizeInput(editor.getHTML()), postId);
-            console.log(content);
             const updatePostResponse = await updatePostRequest(
                 postId, 
                 content, 
@@ -121,7 +120,9 @@ const WritePost = () => {
     };
 
     const thumbnailProcessing = async (postId) => {
-        
+        if (!thumbnailFile) {
+            return null;
+        }
         const formData = new FormData();
         formData.append('file',thumbnailFile,`post-${postId}-thumbnail`);
         const uploadImageResponse = await uploadImageRequest(formData);

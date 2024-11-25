@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import { POST_PATH, ERROR_PATH } from "constants";
 import { getPostRequest } from "apis/post";
@@ -9,6 +9,11 @@ import { DeletePostModal } from "components/post/DeletePostModal";
 import { CommenSection } from "components/comment/CommentSection";
 import 'views/PostDetail/style.css'
 import { createLikeRequest, deleteLikeRequest, getPostLikeCountRequest, isMyLikePostRequest } from "apis/like";
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
+import Color from '@tiptap/extension-color';
+import Link from '@tiptap/extension-link';
 
 const PostDetail = () => {
     const { userName, postTitle, postId } = useParams();
@@ -21,7 +26,16 @@ const PostDetail = () => {
     const [isMyLikePost, setIsMyLikePost] = useState(false);
     const [isDeletePostModalOpen, setIsDeletePostModalOpen] = useState(false);
 
-    const contentRef = useRef(null)
+    const editor = useEditor({
+        extensions: [
+            StarterKit,
+            Image,
+            Color,
+            Link,
+        ],
+        content: '',
+        editable: false
+    });
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -44,6 +58,7 @@ const PostDetail = () => {
                 setPost(getPostResponse.post);
                 setPostUser(getPostResponse.user);
                 setIsMyPost(getPostResponse.user.name === user.name);
+                editor?.commands.setContent(getPostResponse.post.content);
 
                 if (user.isLoggedIn) {
                     const isMyLikePostResponse = await isMyLikePostRequest(postId);
@@ -58,7 +73,7 @@ const PostDetail = () => {
         };
 
         fetchPostData();
-    }, [postId, userName, postTitle, user, navigate]);
+    }, [postId, userName, postTitle, user, navigate, editor]);
 
     const handleEdit = () => {
         navigate(MODIFY_POST_PATH(postId));
@@ -130,11 +145,7 @@ const PostDetail = () => {
                 </div>
 
                 <div className="post-body">
-                    <div
-                        ref={contentRef}
-                        className="prose"
-                        dangerouslySetInnerHTML={{ __html: post.content }}
-                    />
+                    <EditorContent editor={editor} />
                 </div>
                 <div className="post-footer">
                     <div className="post-stats">
